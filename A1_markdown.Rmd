@@ -17,7 +17,6 @@ When you click the **Knit** button a document will be generated that includes bo
 ```{r cars}
 summary(cars)
 ```
-
 ## Including Plots
 
 You can also embed plots, for example:
@@ -27,3 +26,33 @@ plot(pressure)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+## Loading libraries
+```{r}
+library(datasauRus)
+library(tidyverse)
+library(dplyr)
+library(readr)
+library(tibble)
+library(ggplot2)
+# search() check which library are loaded
+# or library(dplyr, ggplot2)
+```
+## dataset head and overview
+```{r dataset dozen}
+datasaurus_dozen %>%
+count(dataset) # count from dplyr library
+```
+
+## Data visualization and summary
+```{r}
+# from data set load dino using pipe code
+dino_data <- datasaurus_dozen %>% filter(dataset == "dino")
+
+# plot it
+ggplot(data = dino_data, mapping = aes(x = x, y = y)) +  geom_point() # map axis x to column x, use point as the shape
+```
+```{r}
+dino_data %>%  summarize(r = cor(x, y))
+```
+
