@@ -1,6 +1,8 @@
 ---
 title: "A1_sheida"
-output: html_document
+output: 
+  html_document: 
+    fig_width: 5
 date: "2023-04-26"
 ---
 
@@ -8,27 +10,8 @@ date: "2023-04-26"
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
-
-```{r cars}
-summary(cars)
-```
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
 ## Loading libraries
-```{r}
+```{r liberaries}
 library(datasauRus)
 library(tidyverse)
 library(dplyr)
@@ -45,14 +28,52 @@ count(dataset) # count from dplyr library
 ```
 
 ## Data visualization and summary
-```{r}
+```{r fig.height=3, fig.width=3}
 # from data set load dino using pipe code
 dino_data <- datasaurus_dozen %>% filter(dataset == "dino")
 
 # plot it
 ggplot(data = dino_data, mapping = aes(x = x, y = y)) +  geom_point() # map axis x to column x, use point as the shape
 ```
+
+```{r fig.height=4, fig.width=4}
+# from data set load star using pipe code
+star_data <- datasaurus_dozen %>% filter(dataset == "star")
+
+# plot it
+ggplot(data = star_data, mapping = aes(x = x, y = y)) +  geom_point() 
+```
+
 ```{r}
+# from data set load circle using pipe code
+circle_data <- datasaurus_dozen %>% filter(dataset == "circle")
+
+# plot it
+ggplot(data = circle_data, mapping = aes(x = x, y = y)) +  geom_point() 
+```
+```{r}
+# calculate the correlation coefficient between x and y
 dino_data %>%  summarize(r = cor(x, y))
+circle_data %>%  summarize(r = cor(x, y))
+star_data %>%  summarize(r = cor(x, y))
+```
+## plot all datasets at once
+```{r fig.height=7, fig.width=7}
+# initial the plot with proper settings
+ggplot(datasaurus_dozen, aes(x = x, y = y, color = dataset))+
+  geom_point()+
+  facet_wrap(~ dataset, ncol = 3) +
+  theme(legend.position = "none")
+# note:
+# 1) The ~ symbol is used to specify the formula, in this case, ~ data set means 
+#    that the plot will be split based on the data set variable.
+# 2) The theme() function in ggplot2 is used to modify the non-data components 
+#    of a plot, such as the axis labels, title, legend
+```
+## use the group_by function to generate all correlation coefficients
+```{r}
+datasaurus_dozen %>%
+  group_by(dataset) %>%
+  summarize(r = cor(x, y))
 ```
 
